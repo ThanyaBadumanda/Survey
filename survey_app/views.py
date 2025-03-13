@@ -43,7 +43,7 @@ def survey_success(request):
 
 
 
-@login_required  # Ensure only logged-in users can access this view
+# @login_required  # Ensure only logged-in users can access this view
 def survey_form(request):
     if request.method == "POST":
         form = SurveyForm(request.POST)

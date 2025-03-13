@@ -1,0 +1,37 @@
+{% extends "admin/base_site.html" %}  
+
+{% block content %}
+  <h1>Pending Survey Approvals</h1>
+
+  {% if surveys %}
+    <table border="1">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Submission Date</th>
+          <th>Tea Expense</th>
+          <th>Coffee Expense</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for survey in surveys %}
+          <tr>
+            <td>{{ survey.user.username }}</td>
+            <td>{{ survey.submitted_at }}</td>
+            <td>{{ survey.tea_expense }}</td>
+            <td>{{ survey.coffee_expense }}</td>
+            <td>
+              <a href="{% url 'approve_survey' survey.id %}" class="button">Approve</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No pending approvals.</p>
+  {% endif %}
+
+  <a href="{% url 'admin:index' %}">Back to Admin</a>
+{% endblock %}
+

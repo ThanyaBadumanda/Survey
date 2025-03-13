@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Welcome, {{ user.username }}</h1>
+
+<h2>Your Survey Submissions</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Submission Date</th>
+            <th>Tea Expense</th>
+            <th>Coffee Expense</th>
+            <th>Biscuit Expense</th>
+            <th>Smoking Expense</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for survey in user_surveys %}
+        <tr>
+            <td>{{ survey.submitted_at }}</td>
+            <td>{{ survey.tea_expense }}</td>
+            <td>{{ survey.coffee_expense }}</td>
+            <td>{{ survey.biscuit_expense }}</td>
+            <td>{{ survey.smoking_expense }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No survey records found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Total Expenses</h2>
+<ul>
+    <li>Tea: ₹{{ total_tea_expense }}</li>
+    <li>Coffee: ₹{{ total_coffee_expense }}</li>
+    <li>Biscuits: ₹{{ total_biscuit_expense }}</li>
+    <li>Smoking: ₹{{ total_smoking_expense }}</li>
+</ul>
+
+{% endblock %}

@@ -7,7 +7,7 @@ from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
 from .models import SurveyResponse
-from .forms import SurveyForm
+from .forms import SurveyForm 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -43,7 +43,7 @@ def survey_success(request):
 
 
 
-# @login_required  # Ensure only logged-in users can access this view
+@login_required  # Ensure only logged-in users can access this view
 def survey_form(request):
     if request.method == "POST":
         form = SurveyForm(request.POST)
@@ -69,50 +69,47 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.urls import reverse
 from .models import SurveyResponse
+import logging
 
-# def generate_random_password():
-#     """Generate a secure random 10-character password with letters and digits."""
-#     # return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-#     print("Approval process started...")  # Debugging Step 1
+logger = logging.getLogger(__name__)
 
-####added now
 def generate_random_password():
     """Generate a secure random 10-character password with letters and digits."""
     return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-######
+
 @login_required
 def approve_survey(request, survey_id):
-    """Approve a survey response, generate a password, and send login details via email."""
+    """Approve a survey response, generate a password, and send login details."""
     survey = get_object_or_404(SurveyResponse, id=survey_id)
 
-    if survey.approved:
+    if survey.is_approved:  
         messages.warning(request, "This survey is already approved.")
         return redirect(reverse('survey_approval_list'))
 
     # Mark the survey as approved
-    survey.approved = True
+    survey.is_approved = True
     survey.save()
-    print(f"Survey {survey.id} approved for user {survey.user.email}")  # Debugging Step 2
-
+    logger.info(f"✅ Survey {survey.id} approved for user {survey.user.email}")
 
     # Generate a random password
     password = generate_random_password()
-    print(f"Generated password: {password}")
+    logger.info(f"🔑 Generated password for {survey.user.email}: {password}")
 
-    # Update and hash the user's password securely
+    # Update and hash the user's password
     user = survey.user
-    user.set_password(password)  # Django automatically hashes the password
+    user.set_password(password)
     user.save()
-    print("Password saved successfully!")  # Debugging Step 4
+    logger.info(f"🔒 Password updated successfully for {user.email}")
 
-    # Send an email with login credentials
+    # Send email with login details
     subject = "Survey Approved - Your Login Details"
+    login_url = request.build_absolute_uri(reverse("login"))  # Dynamic login URL
     message = f"""
     Dear {user.email},
 
     Your survey submission has been approved!
 
-    Login at: http://127.0.0.1:8000/login/
+    Login at: {login_url}
     Username: {user.email}
     Password: {password}
 
@@ -121,7 +118,9 @@ def approve_survey(request, survey_id):
     Regards,
     Survey Admin
     """
+
     try:
+        logger.info(f"📧 Attempting to send email to {user.email}...")
         email_sent = send_mail(
             subject,
             message,
@@ -129,22 +128,84 @@ def approve_survey(request, survey_id):
             [user.email],
             fail_silently=False,
         )
-        print(f"Email sent status: {email_sent}")
-
+        
         if email_sent:
-            messages.success(request, f"Survey by {user.email} has been approved. Login details sent.")
-            print("Email sent successfully!")  # For debugging 5
+            messages.success(request, f"✅ Survey by {user.email} approved. Login details sent.")
+            logger.info(f"✅ Email successfully sent to {user.email}")
         else:
-            messages.error(request, f"Failed to send email to {user.email}.")
-            print("Email sending failed!")  # For debugging 6
+            messages.error(request, f"❌ Failed to send email to {user.email}.")
+            logger.error(f"❌ Email sending failed for {user.email}")
+
     except Exception as e:
-        messages.error(request, f"Error sending email: {str(e)}")
-        print(f"Error sending email: {str(e)}")  # For debugging 7
+        messages.error(request, f"❌ Error sending email: {str(e)}")
+        logger.error(f"❌ Error sending email to {user.email}: {e}")
+
     return redirect(reverse('survey_approval_list'))
 
 
 
 
+# @login_required
+# def approve_survey(request, survey_id):
+#     """Approve a survey response, generate a password, and send login details via email."""
+#     survey = get_object_or_404(SurveyResponse, id=survey_id)
+
+#     if survey.approved:
+#         messages.warning(request, "This survey is already approved.")
+#         return redirect(reverse('survey_approval_list'))
+
+#     # Mark the survey as approved
+#     survey.approved = True
+#     survey.save()
+#     print(f"Survey {survey.id} approved for user {survey.user.email}")  # Debugging Step 2
+
+
+#     # Generate a random password
+#     password = generate_random_password()
+#     print(f"Generated password: {password}")
+
+#     # Update and hash the user's password securely
+#     user = survey.user
+#     user.set_password(password)  # Django automatically hashes the password
+#     user.save()
+#     print("Password saved successfully!")  # Debugging Step 4
+
+#     # Send an email with login credentials
+#     subject = "Survey Approved - Your Login Details"
+#     message = f"""
+#     Dear {user.email},
+
+#     Your survey submission has been approved!
+
+#     Login at: http://127.0.0.1:8000/login/
+#     Username: {user.email}
+#     Password: {password}
+
+#     Please log in and change your password immediately for security reasons.
+
+#     Regards,
+#     Survey Admin
+#     """
+#     try:
+#         email_sent = send_mail(
+#             subject,
+#             message,
+#             settings.EMAIL_HOST_USER,
+#             [user.email],
+#             fail_silently=False,
+#         )
+#         print(f"Email sent status: {email_sent}")
+
+#         if email_sent:
+#             messages.success(request, f"Survey by {user.email} has been approved. Login details sent.")
+#             print("Email sent successfully!")  # For debugging 5
+#         else:
+#             messages.error(request, f"Failed to send email to {user.email}.")
+#             print("Email sending failed!")  # For debugging 6
+#     except Exception as e:
+#         messages.error(request, f"Error sending email: {str(e)}")
+#         print(f"Error sending email: {str(e)}")  # For debugging 7
+#     return redirect(reverse('survey_approval_list'))
 
 
 # User Dashboard to show expenses analytics

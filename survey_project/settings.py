@@ -61,7 +61,7 @@ ROOT_URLCONF = 'survey_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'survey_app', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,10 +91,10 @@ WSGI_APPLICATION = 'survey_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',         # Same as POSTGRES_DB
-        'USER': 'myuser',       # Same as POSTGRES_USER
-        'PASSWORD': 'mypassword', # Same as POSTGRES_PASSWORD
-        'HOST': 'db',           # Name of the Docker service
+        'NAME': 'survey_db',         # Same as POSTGRES_DB
+        'USER': 'postgres',       # Same as POSTGRES_USER
+        'PASSWORD': 'thanya@123', # Same as POSTGRES_PASSWORD
+        'HOST': 'localhost',           # Name of the Docker service
         'PORT': '5432',         # Default PostgreSQL port
     }
 }
@@ -145,12 +145,35 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "prathanauthappa713@gmail.com"
+EMAIL_HOST_USER = "prathanauthappa713@gmail.com"  # No fallback needed
 EMAIL_HOST_PASSWORD = "mjmd tfsp pxyh uynf"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ADMIN_EMAIL = 'prathanauthappa713@gmail.com'
 
-LOGIN_URL = '/login/'  # Change this to your actual login route
-LOGIN_REDIRECT_URL = '/survey_form/'  # Change this to your desired page
+# LOGIN_URL = "/accounts/login/"
+# LOGIN_REDIRECT_URL = '/survey_form/'  # Change this to your desired page
+
+LOGIN_URL = "/accounts/login/"  # Default login page
+LOGIN_REDIRECT_URL = "/survey_form/"  # Redirect to survey form first
+LOGOUT_REDIRECT_URL = "/"  # Redirect to home after logout
+LOGIN_REDIRECT_URL = "/dashboard/"
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'email_debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

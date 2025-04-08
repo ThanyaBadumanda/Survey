@@ -12,7 +12,13 @@ urlpatterns = [
     path("survey_success/", survey_success, name="survey_success"),
     # path('admin/approve/<int:survey_id>/', approve_survey, name='approve_survey'),
     path("surveyresponse/approve/<int:survey_id>/", approve_survey, name="approve_survey"),
-    path("survey_approvals/", survey_approval_list, name="survey_approval_list"),
+    path('survey-approvals/', survey_approval_list, name='survey_approval_list'),
 
+    
 
 ]
+
+
+
+
+

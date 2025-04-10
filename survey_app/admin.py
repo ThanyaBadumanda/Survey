@@ -1,24 +1,3 @@
-# from django.contrib import admin
-# from .models import SurveyResponse
-
-# @admin.register(SurveyResponse)
-# class SurveyResponseAdmin(admin.ModelAdmin):
-#     list_display = ("get_user_email", "tea_expense", "coffee_expense", "biscuit_expense", "smoking_expense", "is_approved", "submitted_at")
-#     list_filter = ("is_approved",)
-#     actions = ["approve_surveys"]
-
-#     def get_user_email(self, obj):
-#         return obj.user.email if obj.user else "Anonymous"
-
-#     get_user_email.short_description = "User Email"
-
-#     def approve_surveys(self, request, queryset):
-#         queryset.update(is_approved=True)
-#         self.message_user(request, "Selected surveys have been approved successfully.")
-
-#     approve_surveys.short_description = "Approve selected surveys"
-
-
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import redirect
@@ -43,7 +22,7 @@ class SurveyResponseAdmin(admin.ModelAdmin):
     actions = ["approve_surveys"]
 
     def get_user_email(self, obj):
-        return obj.user.email if obj.user else "Anonymous"
+        return obj.email or (obj.user.email if obj.user else "Anonymous")
     get_user_email.short_description = "User Email"
 
     def approve_action(self, obj):

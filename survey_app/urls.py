@@ -10,7 +10,6 @@ urlpatterns = [
     path('accounts/login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('accounts/', include('django.contrib.auth.urls')),
     path("survey_success/", survey_success, name="survey_success"),
-    # path('admin/approve/<int:survey_id>/', approve_survey, name='approve_survey'),
     path("surveyresponse/approve/<int:survey_id>/", approve_survey, name="approve_survey"),
     path('survey-approvals/', survey_approval_list, name='survey_approval_list'),
 

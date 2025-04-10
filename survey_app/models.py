@@ -3,6 +3,7 @@ from django.utils.timezone import now
 from django.contrib.auth.models import User
 
 class SurveyResponse(models.Model):
+    email = models.EmailField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     tea_expense = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     coffee_expense = models.DecimalField(max_digits=6, decimal_places=2, default=0)

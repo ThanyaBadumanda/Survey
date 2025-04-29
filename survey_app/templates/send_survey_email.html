@@ -1,10 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
 <form method="post">
     {% csrf_token %}
     <label>Email:</label>
     <input type="email" name="email" required>
     <button type="submit">Send Survey</button>
 </form>
-
+{% endblock %}
 
 
 

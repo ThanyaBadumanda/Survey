@@ -10,7 +10,7 @@ class SurveyResponse(models.Model):
     biscuit_expense = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     smoking_expense = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     submitted_at = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=False)  # Renamed for clarity
+    is_approved = models.BooleanField(default=False)  
     submitted_at = models.DateTimeField(default=now)
 
     def total_expense(self):

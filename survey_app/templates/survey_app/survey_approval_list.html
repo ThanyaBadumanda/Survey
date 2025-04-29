@@ -1,5 +1,6 @@
-{% extends "admin/base_site.html" %}  
+{% extends "admin/base.html" %}  
 
+{% load static %}
 {% block content %}
   <h1>Pending Survey Approvals</h1>
 
@@ -19,7 +20,7 @@
       <tbody>
         {% for survey in surveys %}
           <tr>
-            <td>{{ survey.user.email }}</td>
+            <td>{{ survey.email }}</td>
             <td>{{ survey.tea_expense }}</td>
             <td>{{ survey.coffee_expense }}</td>
             <td>{{ survey.biscuit_expense }}</td>

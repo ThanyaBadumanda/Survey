@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Survey Form</title>
-</head>
-<body>
-    <h2>Daily Expense Survey</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <h2>Daily Expense Survey</h2>
+  <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Submit</button>
+  </form>
+{% endblock %}

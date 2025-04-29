@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-c&!!ngm#)8bc0us@kvjkjkh8$n6@hg_rtzg-fhj11^44ij2lyn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.149', 'localhost', '127.0.0.1','45.67.89.101']
+ALLOWED_HOSTS = ['192.168.1.149', 'localhost', '127.0.0.1','45.67.89.101','192.168.1.39']
 
 
 # Application definition
@@ -131,13 +131,10 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -145,13 +142,12 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "prathanauthappa713@gmail.com"  # No fallback needed
+EMAIL_HOST_USER = "prathanauthappa713@gmail.com"  
 EMAIL_HOST_PASSWORD = "mjmd tfsp pxyh uynf"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ADMIN_EMAIL = 'prathanauthappa713@gmail.com'
 
-# LOGIN_URL = "/accounts/login/"
-# LOGIN_REDIRECT_URL = '/survey_form/'  # Change this to your desired page
+
 
 LOGIN_URL = "/accounts/login/"  # Default login page
 LOGIN_REDIRECT_URL = "/survey_form/"  # Redirect to survey form first

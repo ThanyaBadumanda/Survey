@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <h1>Welcome, {{ user.username }}</h1>
@@ -29,12 +30,52 @@
     </tbody>
 </table>
 
-<h2>Total Expenses</h2>
-<ul>
-    <li>Tea: ₹{{ total_tea_expense }}</li>
-    <li>Coffee: ₹{{ total_coffee_expense }}</li>
-    <li>Biscuits: ₹{{ total_biscuit_expense }}</li>
-    <li>Smoking: ₹{{ total_smoking_expense }}</li>
-</ul>
+<h2>Expense Analytics</h2>
+<div style="max-width: 700px; margin: 0 auto;">
+    <canvas id="expenseAnalyticsChart"></canvas>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('expenseAnalyticsChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Tea', 'Coffee', 'Biscuits', 'Smoking'],
+            datasets: [
+                {
+                    label: 'Today',
+                    data: [{{ daily.tea|default:"0" }}, {{ daily.coffee|default:"0" }}, {{ daily.biscuit|default:"0" }}, {{ daily.smoking|default:"0" }}],
+                    backgroundColor: 'rgba(255, 182, 193, 0.6)'
+                },
+                {
+                    label: 'This Week',
+                    data: [{{ weekly.tea|default:"0" }}, {{ weekly.coffee|default:"0" }}, {{ weekly.biscuit|default:"0" }}, {{ weekly.smoking|default:"0" }}],
+                    backgroundColor: 'rgba(205, 133, 63, 0.6)'
+                },
+                {
+                    label: 'This Month',
+                    data: [{{ monthly.tea|default:"0" }}, {{ monthly.coffee|default:"0" }}, {{ monthly.biscuit|default:"0" }}, {{ monthly.smoking|default:"0" }}],
+                    backgroundColor: 'rgba(255, 215, 0, 0.6)'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}
+
+

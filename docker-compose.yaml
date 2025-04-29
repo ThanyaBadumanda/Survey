@@ -3,17 +3,25 @@ version: '3.8'
 services:
   web:
     build: .
+    command: ["gunicorn", "survey_project.wsgi:application", "--bind", "0.0.0.0:8000"]
+    volumes:
+      - .:/app
     ports:
       - "8000:8000"
     depends_on:
       - db
-   
-  db:
-    image: postgres
     environment:
-      POSTGRES_DB: survey_db  # This should match the NAME in your Django settings.py
-      POSTGRES_USER: postgres  # This should match the USER in your Django settings.py
-      POSTGRES_PASSWORD: thanya@123  # This should match the PASSWORD in your Django settings.py
-    ports:
-      - "5432:5432"  # Exposing PostgreSQL port is okay for external access (optional)
+      - DB_HOST=db  # Ensure this points to the 'db' service
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: survey_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: thanya@123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
 

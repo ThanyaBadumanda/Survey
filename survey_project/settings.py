@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': 'survey_db',         # Same as POSTGRES_DB
         'USER': 'postgres',       # Same as POSTGRES_USER
         'PASSWORD': 'thanya@123', # Same as POSTGRES_PASSWORD
-        'HOST': 'localhost',           # Name of the Docker service
+        'HOST': 'db',           # Name of the Docker service
         'PORT': '5432',         # Default PostgreSQL port
     }
 }
@@ -133,7 +133,7 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = '/app/staticfiles'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
